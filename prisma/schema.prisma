@@ -1,0 +1,53 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  username  String     @unique
+  name      String
+  password  String
+  address   String
+  phone     String
+  usertype  String     // "admin" or "client"
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  shipments Shipment[]
+}
+
+model Shipment {
+  id              String   @id @default(uuid())
+  trackingNumber  String   @unique @default(uuid())
+  senderName      String
+  senderAddress   String
+  senderCity      String
+  senderZipCode   String
+  senderCountry   String
+  receiverName    String
+  receiverAddress String
+  receiverCity    String
+  receiverZipCode String
+  receiverCountry String
+  packageWeight   Float
+  packageType     String
+  description     String?
+  status          String   @default("pending") // pending, in_transit, out_for_delivery, delivered, cancelled
+  estimatedDelivery DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([trackingNumber])
+}
