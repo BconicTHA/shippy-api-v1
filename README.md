@@ -192,6 +192,12 @@ To view the complete schema:
 npx prisma studio
 ```
 
+To add admin
+
+```bash
+npx prisma db seed
+```
+
 This opens a visual database browser at [http://localhost:5555](http://localhost:5555)
 
 ## 🔐 Authentication Flow
